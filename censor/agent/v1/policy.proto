@@ -20,4 +20,8 @@ message AgentPolicy {
   bool watch_sudo = 5;
   bool disable_sudo = 6;
   bool auto_allow_github_hosts = 7;
+  // allowed_cidrs are IPv4/IPv6 prefixes (e.g. "10.0.0.0/8", "fd00::/8").
+  repeated string allowed_cidrs = 8;
+  // require_bpf when true fails startup if eBPF attach fails (recommended for enforce).
+  bool require_bpf = 9;
 }

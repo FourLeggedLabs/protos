@@ -81,8 +81,12 @@ type AgentPolicy struct {
 	WatchSudo            bool                   `protobuf:"varint,5,opt,name=watch_sudo,json=watchSudo,proto3" json:"watch_sudo,omitempty"`
 	DisableSudo          bool                   `protobuf:"varint,6,opt,name=disable_sudo,json=disableSudo,proto3" json:"disable_sudo,omitempty"`
 	AutoAllowGithubHosts bool                   `protobuf:"varint,7,opt,name=auto_allow_github_hosts,json=autoAllowGithubHosts,proto3" json:"auto_allow_github_hosts,omitempty"`
-	unknownFields        protoimpl.UnknownFields
-	sizeCache            protoimpl.SizeCache
+	// allowed_cidrs are IPv4/IPv6 prefixes (e.g. "10.0.0.0/8", "fd00::/8").
+	AllowedCidrs []string `protobuf:"bytes,8,rep,name=allowed_cidrs,json=allowedCidrs,proto3" json:"allowed_cidrs,omitempty"`
+	// require_bpf when true fails startup if eBPF attach fails (recommended for enforce).
+	RequireBpf    bool `protobuf:"varint,9,opt,name=require_bpf,json=requireBpf,proto3" json:"require_bpf,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AgentPolicy) Reset() {
@@ -164,11 +168,25 @@ func (x *AgentPolicy) GetAutoAllowGithubHosts() bool {
 	return false
 }
 
+func (x *AgentPolicy) GetAllowedCidrs() []string {
+	if x != nil {
+		return x.AllowedCidrs
+	}
+	return nil
+}
+
+func (x *AgentPolicy) GetRequireBpf() bool {
+	if x != nil {
+		return x.RequireBpf
+	}
+	return false
+}
+
 var File_censor_agent_v1_policy_proto protoreflect.FileDescriptor
 
 const file_censor_agent_v1_policy_proto_rawDesc = "" +
 	"\n" +
-	"\x1ccensor/agent/v1/policy.proto\x12\x0fcensor.agent.v1\"\xa0\x02\n" +
+	"\x1ccensor/agent/v1/policy.proto\x12\x0fcensor.agent.v1\"\xe6\x02\n" +
 	"\vAgentPolicy\x12%\n" +
 	"\x0ecorrelation_id\x18\x01 \x01(\tR\rcorrelationId\x12)\n" +
 	"\x04mode\x18\x02 \x01(\x0e2\x15.censor.agent.v1.ModeR\x04mode\x12#\n" +
@@ -177,7 +195,10 @@ const file_censor_agent_v1_policy_proto_rawDesc = "" +
 	"\n" +
 	"watch_sudo\x18\x05 \x01(\bR\twatchSudo\x12!\n" +
 	"\fdisable_sudo\x18\x06 \x01(\bR\vdisableSudo\x125\n" +
-	"\x17auto_allow_github_hosts\x18\a \x01(\bR\x14autoAllowGithubHosts*@\n" +
+	"\x17auto_allow_github_hosts\x18\a \x01(\bR\x14autoAllowGithubHosts\x12#\n" +
+	"\rallowed_cidrs\x18\b \x03(\tR\fallowedCidrs\x12\x1f\n" +
+	"\vrequire_bpf\x18\t \x01(\bR\n" +
+	"requireBpf*@\n" +
 	"\x04Mode\x12\x14\n" +
 	"\x10MODE_UNSPECIFIED\x10\x00\x12\x10\n" +
 	"\fMODE_MONITOR\x10\x01\x12\x10\n" +
