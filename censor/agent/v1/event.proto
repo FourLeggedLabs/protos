@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package censor.agent.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/FourLeggedLabs/protos/gen/go/censor/agent/v1;agentv1";
+
+enum EventType {
+  EVENT_TYPE_UNSPECIFIED = 0;
+  EVENT_TYPE_CONNECT = 1;
+  EVENT_TYPE_DNS = 2;
+  EVENT_TYPE_SUDO = 3;
+}
+
+enum Action {
+  ACTION_UNSPECIFIED = 0;
+  ACTION_ALLOW = 1;
+  ACTION_DENY = 2;
+  ACTION_MONITOR_DENY = 3;
+}
+
+enum Protocol {
+  PROTOCOL_UNSPECIFIED = 0;
+  PROTOCOL_TCP = 1;
+  PROTOCOL_UDP = 2;
+}
+
+// AgentEvent is one NDJSON line in the agent audit log (protojson).
+message AgentEvent {
+  google.protobuf.Timestamp ts = 1;
+  EventType type = 2;
+  Action action = 3;
+  uint32 pid = 4;
+  string comm = 5;
+  string dst = 6;
+  uint32 dst_port = 7;
+  Protocol proto = 8;
+  string host = 9;
+  string rule = 10;
+}

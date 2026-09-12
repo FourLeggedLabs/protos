@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package censor.agent.v1;
+
+import "censor/agent/v1/policy.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/FourLeggedLabs/protos/gen/go/censor/agent/v1;agentv1";
+
+// JobContext correlates a GitHub Actions job (including matrix) for the UI.
+message JobContext {
+  string repo_owner = 1;
+  string repo_name = 2;
+  string workflow = 3;
+  string workflow_ref = 4;
+  string run_id = 5;
+  string run_attempt = 6;
+  string job = 7;
+  // job_id is GITHUB_JOB, or "{job}:{matrix_hash}" when matrix is present.
+  string job_id = 8;
+  string sha = 9;
+  string ref = 10;
+  string actor = 11;
+  string event_name = 12;
+  string runner_arch = 13;
+  string runner_os = 14;
+  google.protobuf.Struct matrix = 15;
+}
+
+// AgentLogUpload is the multipart "metadata" part of POST /v1/agent/logs.
+// Events are uploaded separately as a gzipped NDJSON file part.
+message AgentLogUpload {
+  string correlation_id = 1;
+  JobContext job = 2;
+  Mode mode = 3;
+  string agent_version = 4;
+  // status: success | failure | cancelled
+  string status = 5;
+}

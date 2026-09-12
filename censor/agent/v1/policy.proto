@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package censor.agent.v1;
+
+option go_package = "github.com/FourLeggedLabs/protos/gen/go/censor/agent/v1;agentv1";
+
+// Mode controls whether denied traffic is dropped or only logged.
+enum Mode {
+  MODE_UNSPECIFIED = 0;
+  MODE_MONITOR = 1;
+  MODE_ENFORCE = 2;
+}
+
+// AgentPolicy is returned by GET /v1/agent/policy (protojson on the wire).
+message AgentPolicy {
+  string correlation_id = 1;
+  Mode mode = 2;
+  repeated string allowed_hosts = 3;
+  repeated string denied_hosts = 4;
+  bool watch_sudo = 5;
+  bool disable_sudo = 6;
+  bool auto_allow_github_hosts = 7;
+}

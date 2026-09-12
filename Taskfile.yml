@@ -1,0 +1,30 @@
+version: "3"
+
+tasks:
+  default:
+    desc: Lint, generate, and test
+    cmds:
+      - task: lint
+      - task: generate
+      - task: test
+
+  lint:
+    desc: Lint protobufs with buf
+    cmds:
+      - buf lint
+
+  generate:
+    desc: Generate Go stubs from protobufs
+    cmds:
+      - buf generate
+      - cd gen/go && go mod tidy
+
+  test:
+    desc: Run Go tests for generated packages and helpers
+    cmds:
+      - go test ./...
+
+  breaking:
+    desc: Check for breaking protobuf changes against main
+    cmds:
+      - buf breaking --against '.git#branch=main'
