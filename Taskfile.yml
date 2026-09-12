@@ -17,12 +17,12 @@ tasks:
     desc: Generate Go stubs from protobufs
     cmds:
       - buf generate
-      - cd gen/go && go mod tidy
+      - cd gen/go && mise exec go@1.27.1 -- go mod tidy
 
   test:
     desc: Run Go tests for generated packages and helpers
     cmds:
-      - go test ./...
+      - mise exec go@1.27.1 -- go test ./...
 
   breaking:
     desc: Check for breaking protobuf changes against main
